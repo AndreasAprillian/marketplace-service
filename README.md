@@ -1,91 +1,75 @@
 # marketplace-service
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
+Multi-module Quarkus marketplace with independent services, each running on its own port and sharing a single PostgreSQL database (`marketplace`) and schema.
 
-If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
+## Modules
 
-## Running the application in dev mode
+| Module | Type | Port | Description |
+| ------ | ---- | ---- | ----------- |
+| `shared-library` | library (jar) | - | Shared code (DTOs, base entity, constants) used by every service |
+| `customer-service` | application | 8081 | Customer CRUD |
+| `order-service` | application | 8082 | Order CRUD |
+| `checkout-service` | application | 8083 | Checkout CRUD |
+| `notification-service` | application | 8084 | Notification CRUD |
 
-You can run your application in dev mode that enables live coding using:
+## Database
 
-```shell script
-./mvnw quarkus:dev
+All services connect to one PostgreSQL database:
+
+```properties
+quarkus.datasource.db-kind=postgresql
+quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/marketplace
+quarkus.datasource.username=postgres
+quarkus.datasource.password=postgres
 ```
 
-> **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
+Create the database before running (single schema, e.g. `public`):
 
-## Packaging and running the application
+```shell script
+psql -U postgres -c "CREATE DATABASE marketplace;"
+```
 
-The application can be packaged using:
+## Building
+
+Build the whole project (all modules):
 
 ```shell script
 ./mvnw package
 ```
 
-It produces the `quarkus-run.jar` file in the `target/quarkus-app/` directory.
-Be aware that it’s not an _über-jar_ as the dependencies are copied into the `target/quarkus-app/lib/` directory.
+## Running in dev mode
 
-The application is now runnable using `java -jar target/quarkus-app/quarkus-run.jar`.
-
-If you want to build an _über-jar_, execute the following command:
+Each application module is started individually with `-pl`:
 
 ```shell script
-./mvnw package -Dquarkus.package.jar.type=uber-jar
+./mvnw quarkus:dev -pl customer-service
+./mvnw quarkus:dev -pl order-service
+./mvnw quarkus:dev -pl checkout-service
+./mvnw quarkus:dev -pl notification-service
 ```
 
-The application, packaged as an _über-jar_, is now runnable using `java -jar target/*-runner.jar`.
+OpenAPI / Swagger UI for each service: `http://localhost:<port>/q/swagger-ui`
+
+## Packaging and running the application
+
+```shell script
+./mvnw package
+```
+
+Each service produces a `quarkus-run.jar` in its own `target/quarkus-app/` directory, runnable with:
+
+```shell script
+java -jar <module>/target/quarkus-app/quarkus-run.jar
+```
 
 ## Creating a native executable
-
-You can create a native executable using:
 
 ```shell script
 ./mvnw package -Dnative
 ```
 
-Or, if you don't have GraalVM installed, you can run the native executable build in a container using:
+Or, if you don't have GraalVM installed, run the native executable build in a container:
 
 ```shell script
 ./mvnw package -Dnative -Dquarkus.native.container-build=true
 ```
-
-You can then execute your native executable with: `./target/marketplace-service-1.0.0-SNAPSHOT-runner`
-
-If you want to learn more about building native executables, please consult <https://quarkus.io/guides/maven-tooling>.
-
-## Related Guides
-
-- REST resources for Hibernate ORM with Panache ([guide](https://quarkus.io/guides/rest-data-panache)): Generate Jakarta REST resources for your Hibernate Panache entities and repositories
-- RESTEasy Classic's REST Client ([guide](https://quarkus.io/guides/resteasy-client)): Call REST services
-- SmallRye OpenAPI ([guide](https://quarkus.io/guides/openapi-swaggerui)): Generate OpenAPI schemas and serve Swagger UI for REST API documentation
-- REST Jackson ([guide](https://quarkus.io/guides/rest#json-serialisation)): Jackson serialization support for Quarkus REST. This extension is not compatible with the quarkus-resteasy extension, or any of the extensions that depend on it
-- Messaging - Kafka Connector ([guide](https://quarkus.io/guides/kafka-getting-started)): Connect to Kafka with Reactive Messaging
-- JDBC Driver - PostgreSQL ([guide](https://quarkus.io/guides/datasource)): Connect to the PostgreSQL database via JDBC
-
-## Provided Code
-
-### REST Data with Panache
-
-Generating Jakarta REST resources with Panache
-
-[Related guide section...](https://quarkus.io/guides/rest-data-panache)
-
-
-### Messaging codestart
-
-Use Quarkus Messaging
-
-[Related Apache Kafka guide section...](https://quarkus.io/guides/kafka-reactive-getting-started)
-
-
-### REST
-
-Easily start your REST Web Services
-
-[Related guide section...](https://quarkus.io/guides/getting-started-reactive#reactive-jax-rs-resources)
-
-### RESTEasy Client
-
-Invoke different services through REST with JSON
-
-[Related guide section...](https://quarkus.io/guides/resteasy-client)
