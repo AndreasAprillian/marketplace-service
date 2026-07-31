@@ -1,6 +1,6 @@
 # marketplace-service
 
-Multi-module Quarkus marketplace with independent services, each running on its own port and sharing a single PostgreSQL database (`marketplace`) and schema.
+Multi-module Quarkus marketplace with independent services, each running on its own port and sharing a single PostgreSQL database (`marketplace-db`) and schema, plus Kafka for event-driven messaging.
 
 ## Modules
 
@@ -9,24 +9,34 @@ Multi-module Quarkus marketplace with independent services, each running on its 
 | `shared-library` | library (jar) | - | Shared code (DTOs, base entity, constants) used by every service |
 | `customer-service` | application | 8081 | Customer CRUD |
 | `order-service` | application | 8082 | Order CRUD |
-| `checkout-service` | application | 8083 | Checkout CRUD |
-| `notification-service` | application | 8084 | Notification CRUD |
+| `checkout-service` | application | 8083 | Checkout (no DB, Kafka + REST only) |
+| `notification-service` | application | 8084 | Notification CRUD, consumes events |
 
-## Database
+## Infrastructure (Docker)
 
-All services connect to one PostgreSQL database:
+PostgreSQL and Kafka run in Docker via `docker/docker-compose.yml`:
+
+```shell script
+docker compose -f docker/docker-compose.yml up -d
+```
+
+| Service | Host port | Details |
+| ------- | --------- | ------- |
+| PostgreSQL | 5433 | db `marketplace-db`, user/pass `postgres/postgres`, schema `public` |
+| Kafka | 9092 | topics created automatically (`marketplace.*.events`) |
+| Kafka UI | 8089 | http://localhost:8089 |
+
+The schema and seed data are created automatically on first start from `docker/postgres/init/01-init.sql`.
+
+All services that use a database connect to the same PostgreSQL:
 
 ```properties
 quarkus.datasource.db-kind=postgresql
-quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5432/marketplace
+quarkus.datasource.jdbc.url=jdbc:postgresql://localhost:5433/marketplace-db
 quarkus.datasource.username=postgres
 quarkus.datasource.password=postgres
-```
 
-Create the database before running (single schema, e.g. `public`):
-
-```shell script
-psql -U postgres -c "CREATE DATABASE marketplace;"
+kafka.bootstrap.servers=localhost:9092
 ```
 
 ## Building
