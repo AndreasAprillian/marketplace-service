@@ -7,20 +7,18 @@ import org.acme.order.repository.ProductRepository;
 import org.acme.shared.dto.CheckoutRequest;
 
 @ApplicationScoped
-public class CartValidationService {
+public class ProductService {
 
     @Inject
     ProductRepository productRepository;
 
-    @Inject
-    OrderFailedService orderFailedService;
-
-    public void validateCart(CheckoutRequest request) {
+    public boolean validateProduct(CheckoutRequest request) {
         for (var item : request.getItems()) {
             Product product = productRepository.find("id", item.getProductId()).firstResult();
             if (product == null) {
-                orderFailedService.orderProcesFailed(request);
+                return false;
             }
         }
+        return true;
     }
 }

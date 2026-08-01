@@ -6,6 +6,7 @@ import jakarta.transaction.Transactional;
 import org.acme.order.entity.Product;
 import org.acme.order.repository.ProductRepository;
 import org.acme.shared.dto.CartItem;
+import org.acme.shared.dto.CheckoutRequest;
 
 import java.util.List;
 
@@ -16,17 +17,14 @@ public class StockService {
     ProductRepository productRepository;
 
     @Transactional
-    public boolean checkStock(List<CartItem> items) {
+    public boolean checkStock(CheckoutRequest request) {
+        List<CartItem> items = request.getItems();
+
         for (var item : items) {
             Product product = productRepository.find("id", item.getProductId()).firstResult();
             if (product == null || product.stock < item.getQuantity()) {
                 return false;
             }
-        }
-        for (var item : items) {
-            Product product = productRepository.find("id", item.getProductId()).firstResult();
-            product.stock -= item.getQuantity();
-            productRepository.persist(product);
         }
         return true;
     }

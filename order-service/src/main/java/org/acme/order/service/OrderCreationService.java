@@ -8,6 +8,7 @@ import org.acme.order.entity.OrderItem;
 import org.acme.order.entity.Product;
 import org.acme.order.repository.ProductRepository;
 import org.acme.shared.dto.CartItem;
+import org.acme.shared.dto.CheckoutRequest;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -19,10 +20,14 @@ public class OrderCreationService {
     ProductRepository productRepository;
 
     @Transactional
-    public OrderEntity createOrder(String orderId, List<CartItem> items, String customerUsername,
-                                   String email, String paymentMethod,
-                                   BigDecimal subtotal, BigDecimal shippingCost,
+    public OrderEntity createOrder(CheckoutRequest request, BigDecimal subtotal, BigDecimal shippingCost,
                                    BigDecimal discount, BigDecimal total) {
+        String orderId = request.getOrderId();
+        List<CartItem> items = request.getItems();
+        String customerUsername = request.getCustomerUsername();
+        String email = request.getEmail();
+        String paymentMethod = request.getPaymentMethod();
+
         OrderEntity order = OrderEntity.builder()
                 .orderId(orderId)
                 .total(total)
@@ -47,8 +52,11 @@ public class OrderCreationService {
                     .price(product != null ? product.price : BigDecimal.ZERO)
                     .build();
             OrderItem.persist(orderItem);
-        }
 
+            product.setStock(product.getStock() - item.getQuantity());
+            Product.persist(product);
+        }
+        System.out.println("Order Berhasil !");
         return order;
     }
 }

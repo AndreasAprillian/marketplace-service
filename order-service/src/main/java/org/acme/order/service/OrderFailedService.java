@@ -19,6 +19,8 @@ public class OrderFailedService {
                 .customerUsername(request.getCustomerUsername())
                 .email(request.getEmail())
                 .build();
+
+        System.out.println("Order Gagal !");
         orderFailedProducer.sendOrderFailed(failEvent);
     }
 }

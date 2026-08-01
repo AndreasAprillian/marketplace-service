@@ -48,6 +48,6 @@ public class CheckoutResource {
                 .build();
         checkoutService.processCheckout(modified);
         log.warn("OrderId ="+modified.getOrderId()+" received for customer: " + claims.getUsername());
-        return Response.accepted().entity("OrderId ="+modified.getOrderId()+" received for customer: " + claims.getUsername()).build();
+        return Response.accepted().entity("OrderId = "+modified.getOrderId()+" received for customer: " + claims.getUsername()).build();
     }
 }

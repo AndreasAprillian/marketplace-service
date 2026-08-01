@@ -27,7 +27,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 class CheckoutWorkflowProcessTest {
 
     @Inject
-    @Named("checkout-workflow")
+    @Named("checkout_workflow")
     Process<? extends Model> checkoutProcess;
 
     @Inject
@@ -81,6 +81,16 @@ class CheckoutWorkflowProcessTest {
 
         assertEquals(ProcessInstance.STATE_COMPLETED, instance.status());
         assertFalse(InMemoryStore.ORDER_IDS_CREATED.contains("ORD-10002"));
+        assertEquals("FAILED", lastEventStatus());
+    }
+
+    @Test
+    void productNotFoundPublishesOrderFailed() {
+        ProcessInstance<?> instance = checkoutProcess.createInstance(newProcessInstanceModel(newCheckout("ORD-10003", "P999", 1)));
+        instance.start();
+
+        assertEquals(ProcessInstance.STATE_COMPLETED, instance.status());
+        assertFalse(InMemoryStore.ORDER_IDS_CREATED.contains("ORD-10003"));
         assertEquals("FAILED", lastEventStatus());
     }
 
