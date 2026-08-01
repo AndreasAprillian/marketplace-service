@@ -14,10 +14,11 @@ public class JwtTokenProvider {
         try {
             JwtClaims claims = new JwtClaims();
             claims.setIssuer("marketplace");
-            claims.setSubject(customer.username);
-            claims.setClaim("customerId", customer.id);
-            claims.setClaim("username", customer.username);
-            claims.setClaim("email", customer.email);
+            claims.setSubject(customer.getUsername());
+            claims.setClaim("customerId", customer.getId());
+            claims.setClaim("username", customer.getUsername());
+            claims.setClaim("email", customer.getEmail());
+            claims.setClaim("region", customer.getRegion());
             claims.setExpirationTimeMinutesInTheFuture(1440);
 
             JsonWebSignature jws = new JsonWebSignature();

@@ -1,6 +1,6 @@
 # marketplace-service
 
-Marketplace Quarkus multi-modul dengan service-service independen, masing-masing berjalan di port sendiri dan berbagi satu database PostgreSQL (`marketplace-db`) dengan skema yang sama, serta Kafka untuk messaging berbasis event.
+Marketplace Quarkus multi-modul dengan service-service independen, masing-masing berjalan di port berbeda dan berbagi satu database PostgreSQL (`marketplace-db`) dengan skema yang sama, serta Kafka untuk messaging berbasis event.
 
 ## Modul
 
@@ -33,13 +33,13 @@ Klien ──POST /checkout──▶ checkout-service (8083) ──(ORDER_CREATED
 
 - **Terima dari Kafka**: `order-service/src/main/java/org/acme/order/consumer/OrderConsumer.java` (`@Incoming(ORDER_CREATED)` + `@Transactional`), lalu menstart instance proses Kogito `checkout_workflow` — qualifier bean `@Named("checkout_workflow")` (underscore, sesuai id proses di BPMN).
 - **Manipulasi data**: dieksekusi oleh BPMN `order-service/src/main/resources/checkout-workflow.bpmn2` lewat Service Task: `ProductService.validateProduct` → `StockService.checkStock` (validasi + kurangi stok) → `SubTotalCalculationService` → `ShippingService` → `DiscountCalculationService` → `TotalCalculationService` → `OrderValidationService` → `OrderCreationService`.
-- **Tulis balik ke Kafka**: `order-service/.../producer/PaymentProducer.java` (`PAYMENT_PROCESSED`) dan `OrderFailedProducer.java` (`ORDER_FAILED`), dipanggil dari Service Task `PaymentService.processPayment` dan `OrderFailedService.orderProcesFailed`.
+- **kirim balik ke Kafka**: `order-service/.../producer/PaymentProducer.java` (`PAYMENT_PROCESSED`) dan `OrderFailedProducer.java` (`ORDER_FAILED`), dipanggil dari Service Task `PaymentService.processPayment` dan `OrderFailedService.orderProcesFailed`.
 - **Simpan ke database**: `order-service/.../service/OrderCreationService.java` (persist `OrderEntity` + `OrderItem` ke PostgreSQL via Hibernate Panache).
 - **Tech stack**: Java 17 (`maven.compiler.release=17`), Quarkus 3.31 + Kogito `jbpm-quarkus` (10.2.0) di `order-service`, PostgreSQL + Kafka (Docker).
 
 ### Soal 2 — BPMN checkout dengan Kogito + ilustrasi di test (BPMN yang sama di-embed di `order-service`, diilustrasikan mandiri di `checkout-workflow`)
 
-Proses BPMN dieksekusi langsung oleh Kogito (jBPM 10) baik di dalam `order-service` (dipicu event Kafka) maupun mandiri di `checkout-workflow` (bean in-memory):
+Proses BPMN dieksekusi langsung oleh Kogito di dalam `order-service` (triger event Kafka) maupun mandiri di `checkout-workflow` (tanpa db):
 
 ```
 Start → Validate Product → [Product Exist?]
@@ -131,11 +131,13 @@ java -jar <module>/target/quarkus-app/quarkus-run.jar
 
 ## Membuat native executable
 
+Dengan GraalVM:
+
 ```shell script
 ./mvnw package -Dnative
 ```
 
-Atau, jika kamu tidak punya GraalVM, jalankan build native executable dalam container:
+Atau, jalankan build native executable dalam container:
 
 ```shell script
 ./mvnw package -Dnative -Dquarkus.native.container-build=true
