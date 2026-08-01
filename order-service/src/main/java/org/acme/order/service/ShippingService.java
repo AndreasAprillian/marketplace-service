@@ -15,6 +15,6 @@ public class ShippingService {
 
     public BigDecimal calculateShipping(String region) {
         ShippingRate rate = shippingRateRepository.find("region", region).firstResult();
-        return rate != null ? rate.rate : BigDecimal.TEN;
+        return rate != null ? rate.rate : BigDecimal.valueOf(10000L);
     }
 }

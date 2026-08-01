@@ -31,4 +31,7 @@ public class CustomerEntity extends PanacheEntityBase {
 
     @Column(name = "phone_no")
     public String phoneNo;
+
+    @Column(name = "region")
+    public String region;
 }

@@ -11,9 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.acme.checkout.service.CheckoutService;
 import org.acme.shared.dto.CheckoutRequest;
 import org.acme.shared.security.JwtClaimExtractor;
+import org.acme.shared.util.OrderIdGenerator;
 import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
-
-import java.util.UUID;
 
 @Slf4j
 @Path("/checkout")
@@ -40,11 +39,12 @@ public class CheckoutResource {
                     .build();
         }
         CheckoutRequest modified = CheckoutRequest.builder()
-                .orderId(UUID.randomUUID().toString())
+                .orderId(OrderIdGenerator.generateOrderId())
                 .items(request.getItems())
                 .paymentMethod(request.getPaymentMethod())
                 .customerUsername(claims.getUsername())
                 .email(claims.getEmail())
+                .region(claims.getRegion())
                 .build();
         checkoutService.processCheckout(modified);
         log.warn("OrderId ="+modified.getOrderId()+" received for customer: " + claims.getUsername());

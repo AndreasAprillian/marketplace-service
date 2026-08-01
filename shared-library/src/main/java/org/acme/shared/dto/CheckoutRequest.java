@@ -22,4 +22,7 @@ public class CheckoutRequest {
 
     @Schema(hidden = true)
     private String customerUsername;
+
+    @Schema(hidden = true)
+    private String region;
 }

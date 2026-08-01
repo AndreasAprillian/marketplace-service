@@ -35,6 +35,7 @@ public class JwtClaimExtractor {
             result.setCustomerId(claims.getClaimValue("customerId", Long.class));
             result.setUsername(claims.getClaimValue("username", String.class));
             result.setEmail(claims.getClaimValue("email", String.class));
+            result.setRegion(claims.getClaimValue("region", String.class));
             return result;
         } catch (Exception e) {
             throw new RuntimeException("Invalid or expired JWT token", e);
@@ -52,5 +53,6 @@ public class JwtClaimExtractor {
         private Long customerId;
         private String username;
         private String email;
+        private String region;
     }
 }

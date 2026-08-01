@@ -10,7 +10,8 @@ CREATE TABLE IF NOT EXISTS customers (
     username  VARCHAR(255) UNIQUE,
     email     VARCHAR(255),
     password  VARCHAR(255),
-    phone_no  VARCHAR(255)
+    phone_no  VARCHAR(255),
+    region    VARCHAR(255)
 );
 
 CREATE TABLE IF NOT EXISTS products (
@@ -69,9 +70,9 @@ CREATE TABLE IF NOT EXISTS email_logs (
 -- =============================================================
 
 -- Password semua akun seed: password123
-INSERT INTO customers (username, email, password, phone_no) VALUES
-    ('budi',   'budi@example.com',   '$2a$10$BMx1wC7tZH.j4Gz.R2XNY.L8X3rkBmfIo45kEKTTuwVDOjQSyJ4z2', '081234567890'),
-    ('siti',   'siti@example.com',   '$2a$10$BMx1wC7tZH.j4Gz.R2XNY.L8X3rkBmfIo45kEKTTuwVDOjQSyJ4z2', '081298765432')
+INSERT INTO customers (username, email, password, phone_no, region) VALUES
+    ('budi',   'budi@example.com',   '$2a$10$BMx1wC7tZH.j4Gz.R2XNY.L8X3rkBmfIo45kEKTTuwVDOjQSyJ4z2', '081234567890', 'Jakarta'),
+    ('siti',   'siti@example.com',   '$2a$10$BMx1wC7tZH.j4Gz.R2XNY.L8X3rkBmfIo45kEKTTuwVDOjQSyJ4z2', '081298765432', 'Bandung')
 ON CONFLICT (username) DO NOTHING;
 
 INSERT INTO products (id, name, price, stock) VALUES

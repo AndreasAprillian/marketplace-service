@@ -14,7 +14,7 @@
         <module>customer-service</module>
         <module>order-service</module>
         <module>checkout-service</module>
-        <module>notification-service</module>
+        <module>email-service</module>
     </modules>
 
     <properties>

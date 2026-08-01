@@ -22,6 +22,7 @@ public class CustomerService {
                 .username(customer.username)
                 .email(customer.email)
                 .phoneNo(customer.phoneNo)
+                .region(customer.region)
                 .build();
     }
 }

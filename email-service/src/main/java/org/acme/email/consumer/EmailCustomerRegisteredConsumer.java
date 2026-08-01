@@ -1,9 +1,9 @@
-package org.acme.notification.consumer;
+package org.acme.email.consumer;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.acme.notification.service.EmailService;
+import org.acme.email.service.EmailService;
 import org.acme.shared.constant.KafkaTopic;
 import org.acme.shared.dto.CustomerRegisteredEvent;
 import org.eclipse.microprofile.reactive.messaging.Incoming;

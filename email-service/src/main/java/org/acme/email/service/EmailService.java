@@ -1,10 +1,10 @@
-package org.acme.notification.service;
+package org.acme.email.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import org.acme.notification.entity.EmailLog;
-import org.acme.notification.repository.EmailLogRepository;
+import org.acme.email.entity.EmailLog;
+import org.acme.email.repository.EmailLogRepository;
 
 import java.time.LocalDateTime;
 
@@ -29,5 +29,7 @@ public class EmailService {
                 .createdAt(LocalDateTime.now())
                 .build();
         EmailLog.persist(log);
+
+        System.out.println("notification sent !");
     }
 }

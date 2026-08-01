@@ -10,7 +10,7 @@ Multi-module Quarkus marketplace with independent services, each running on its 
 | `customer-service` | application | 8081 | Customer CRUD |
 | `order-service` | application | 8082 | Order CRUD |
 | `checkout-service` | application | 8083 | Checkout (no DB, Kafka + REST only) |
-| `notification-service` | application | 8084 | Notification CRUD, consumes events |
+| `email-service` | application | 8084 | Email CRUD, consumes events |
 
 ## Infrastructure (Docker)
 
@@ -55,7 +55,7 @@ Each application module is started individually with `-pl`:
 ./mvnw quarkus:dev -pl customer-service
 ./mvnw quarkus:dev -pl order-service
 ./mvnw quarkus:dev -pl checkout-service
-./mvnw quarkus:dev -pl notification-service
+./mvnw quarkus:dev -pl email-service
 ```
 
 OpenAPI / Swagger UI for each service: `http://localhost:<port>/q/swagger-ui`

@@ -44,6 +44,7 @@ public class AuthService {
                 .username(request.getUsername())
                 .email(request.getEmail())
                 .password(BCrypt.hashpw(request.getPassword(), BCrypt.gensalt()))
+                .region(request.getRegion())
                 .build();
         customerRepository.persist(customer);
 
@@ -57,6 +58,7 @@ public class AuthService {
                     .customerId(customer.getId())
                     .username(customer.getUsername())
                     .email(customer.getEmail())
+                    .region(customer.getRegion())
                     .build();
 
             ObjectMapper mapper = new ObjectMapper();

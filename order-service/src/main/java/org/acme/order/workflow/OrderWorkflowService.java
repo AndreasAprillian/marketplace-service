@@ -50,7 +50,7 @@ public class OrderWorkflowService {
             }
 
             BigDecimal subtotal = subTotalCalculationService.calculateSubtotal(request);
-            BigDecimal shippingCost = shippingService.calculateShipping("DEFAULT");
+            BigDecimal shippingCost = shippingService.calculateShipping(request.getRegion());
             BigDecimal discount = discountCalculationService.calculateDiscount(subtotal);
             BigDecimal total = subtotal.add(shippingCost).subtract(discount);
 
