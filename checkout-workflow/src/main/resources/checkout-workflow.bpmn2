@@ -1,0 +1,865 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn2:definitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmn2="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:bpsim="http://www.bpsim.org/schemas/1.0" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:drools="http://www.jboss.org/drools" id="_837fQW-gED-ru8VsGFsATw" xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL BPMN20.xsd http://www.jboss.org/drools drools.xsd http://www.bpsim.org/schemas/1.0 bpsim.xsd http://www.omg.org/spec/DD/20100524/DC DC.xsd http://www.omg.org/spec/DD/20100524/DI DI.xsd " exporter="jBPM Process Modeler" exporterVersion="2.0" targetNamespace="http://www.omg.org/bpmn20">
+  <bpmn2:itemDefinition id="_checkoutItem" structureRef="org.acme.shared.dto.CheckoutRequest"/>
+  <bpmn2:itemDefinition id="_regionItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="_orderIdItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="_subtotalItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="_shippingCostItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="_discountItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="_totalItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="_stockAvailableItem" structureRef="java.lang.Boolean"/>
+  <bpmn2:itemDefinition id="_orderExistsItem" structureRef="java.lang.Boolean"/>
+  <bpmn2:itemDefinition id="_PROCESS_PAYMENT_InMessageType"/>
+  <bpmn2:itemDefinition id="_PROCESS_PAYMENT_OutMessageType"/>
+  <bpmn2:itemDefinition id="__PROCESS_PAYMENT_requestInputXItem" structureRef="org.acme.shared.dto.CheckoutRequest"/>
+  <bpmn2:itemDefinition id="__PROCESS_PAYMENT_totalInputXItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="_CREATE_ORDER_InMessageType"/>
+  <bpmn2:itemDefinition id="_CREATE_ORDER_OutMessageType"/>
+  <bpmn2:itemDefinition id="__CREATE_ORDER_requestInputXItem" structureRef="org.acme.shared.dto.CheckoutRequest"/>
+  <bpmn2:itemDefinition id="__CREATE_ORDER_subtotalInputXItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="__CREATE_ORDER_shippingCostInputXItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="__CREATE_ORDER_discountInputXItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="__CREATE_ORDER_totalInputXItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="_ORDER_VALIDATION_InMessageType"/>
+  <bpmn2:itemDefinition id="_ORDER_VALIDATION_OutMessageType"/>
+  <bpmn2:itemDefinition id="__ORDER_VALIDATION_ParameterInputXItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="__ORDER_VALIDATION_ResultOutputXItem" structureRef="java.lang.Boolean"/>
+  <bpmn2:itemDefinition id="_CALC_TOTAL_InMessageType"/>
+  <bpmn2:itemDefinition id="_CALC_TOTAL_OutMessageType"/>
+  <bpmn2:itemDefinition id="__CALC_TOTAL_subtotalInputXItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="__CALC_TOTAL_shippingCostInputXItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="__CALC_TOTAL_discountInputXItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="__CALC_TOTAL_ResultOutputXItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="_CALC_DISCOUNT_InMessageType"/>
+  <bpmn2:itemDefinition id="_CALC_DISCOUNT_OutMessageType"/>
+  <bpmn2:itemDefinition id="__CALC_DISCOUNT_ParameterInputXItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="__CALC_DISCOUNT_ResultOutputXItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="_CALC_SHIPPING_InMessageType"/>
+  <bpmn2:itemDefinition id="_CALC_SHIPPING_OutMessageType"/>
+  <bpmn2:itemDefinition id="__CALC_SHIPPING_ParameterInputXItem" structureRef="String"/>
+  <bpmn2:itemDefinition id="__CALC_SHIPPING_ResultOutputXItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="_CALC_SUBTOTAL_InMessageType"/>
+  <bpmn2:itemDefinition id="_CALC_SUBTOTAL_OutMessageType"/>
+  <bpmn2:itemDefinition id="__CALC_SUBTOTAL_ParameterInputXItem" structureRef="org.acme.shared.dto.CheckoutRequest"/>
+  <bpmn2:itemDefinition id="__CALC_SUBTOTAL_ResultOutputXItem" structureRef="java.math.BigDecimal"/>
+  <bpmn2:itemDefinition id="_ORDER_FAILED_InMessageType"/>
+  <bpmn2:itemDefinition id="_ORDER_FAILED_OutMessageType"/>
+  <bpmn2:itemDefinition id="__ORDER_FAILED_ParameterInputXItem" structureRef="org.acme.shared.dto.CheckoutRequest"/>
+  <bpmn2:itemDefinition id="_CHECK_STOCK_InMessageType"/>
+  <bpmn2:itemDefinition id="_CHECK_STOCK_OutMessageType"/>
+  <bpmn2:itemDefinition id="__CHECK_STOCK_ParameterInputXItem" structureRef="org.acme.shared.dto.CheckoutRequest"/>
+  <bpmn2:itemDefinition id="__CHECK_STOCK_ResultOutputXItem" structureRef="java.lang.Boolean"/>
+  <bpmn2:itemDefinition id="_VALIDATE_CART_InMessageType"/>
+  <bpmn2:itemDefinition id="_VALIDATE_CART_OutMessageType"/>
+  <bpmn2:itemDefinition id="__VALIDATE_CART_ParameterInputXItem" structureRef="org.acme.shared.dto.CheckoutRequest"/>
+  <bpmn2:message id="_PROCESS_PAYMENT_InMessage" itemRef="_PROCESS_PAYMENT_InMessageType"/>
+  <bpmn2:message id="_PROCESS_PAYMENT_OutMessage" itemRef="_PROCESS_PAYMENT_OutMessageType"/>
+  <bpmn2:interface id="_PROCESS_PAYMENT_ServiceInterface" name="org.acme.order.service.PaymentService" implementationRef="org.acme.order.service.PaymentService">
+    <bpmn2:operation id="_PROCESS_PAYMENT_ServiceOperation" name="processPayment" implementationRef="processPayment">
+      <bpmn2:inMessageRef>_PROCESS_PAYMENT_InMessage</bpmn2:inMessageRef>
+      <bpmn2:outMessageRef>_PROCESS_PAYMENT_OutMessage</bpmn2:outMessageRef>
+    </bpmn2:operation>
+  </bpmn2:interface>
+  <bpmn2:message id="_CREATE_ORDER_InMessage" itemRef="_CREATE_ORDER_InMessageType"/>
+  <bpmn2:message id="_CREATE_ORDER_OutMessage" itemRef="_CREATE_ORDER_OutMessageType"/>
+  <bpmn2:interface id="_CREATE_ORDER_ServiceInterface" name="org.acme.order.service.OrderCreationService" implementationRef="org.acme.order.service.OrderCreationService">
+    <bpmn2:operation id="_CREATE_ORDER_ServiceOperation" name="createOrder" implementationRef="createOrder">
+      <bpmn2:inMessageRef>_CREATE_ORDER_InMessage</bpmn2:inMessageRef>
+      <bpmn2:outMessageRef>_CREATE_ORDER_OutMessage</bpmn2:outMessageRef>
+    </bpmn2:operation>
+  </bpmn2:interface>
+  <bpmn2:message id="_ORDER_VALIDATION_InMessage" itemRef="_ORDER_VALIDATION_InMessageType"/>
+  <bpmn2:message id="_ORDER_VALIDATION_OutMessage" itemRef="_ORDER_VALIDATION_OutMessageType"/>
+  <bpmn2:interface id="_ORDER_VALIDATION_ServiceInterface" name="org.acme.order.service.OrderValidationService" implementationRef="org.acme.order.service.OrderValidationService">
+    <bpmn2:operation id="_ORDER_VALIDATION_ServiceOperation" name="isOrderExists" implementationRef="isOrderExists">
+      <bpmn2:inMessageRef>_ORDER_VALIDATION_InMessage</bpmn2:inMessageRef>
+      <bpmn2:outMessageRef>_ORDER_VALIDATION_OutMessage</bpmn2:outMessageRef>
+    </bpmn2:operation>
+  </bpmn2:interface>
+  <bpmn2:message id="_CALC_TOTAL_InMessage" itemRef="_CALC_TOTAL_InMessageType"/>
+  <bpmn2:message id="_CALC_TOTAL_OutMessage" itemRef="_CALC_TOTAL_OutMessageType"/>
+  <bpmn2:interface id="_CALC_TOTAL_ServiceInterface" name="org.acme.order.service.TotalCalculationService" implementationRef="org.acme.order.service.TotalCalculationService">
+    <bpmn2:operation id="_CALC_TOTAL_ServiceOperation" name="calculateTotal" implementationRef="calculateTotal">
+      <bpmn2:inMessageRef>_CALC_TOTAL_InMessage</bpmn2:inMessageRef>
+      <bpmn2:outMessageRef>_CALC_TOTAL_OutMessage</bpmn2:outMessageRef>
+    </bpmn2:operation>
+  </bpmn2:interface>
+  <bpmn2:message id="_CALC_DISCOUNT_InMessage" itemRef="_CALC_DISCOUNT_InMessageType"/>
+  <bpmn2:message id="_CALC_DISCOUNT_OutMessage" itemRef="_CALC_DISCOUNT_OutMessageType"/>
+  <bpmn2:interface id="_CALC_DISCOUNT_ServiceInterface" name="org.acme.order.service.DiscountCalculationService" implementationRef="org.acme.order.service.DiscountCalculationService">
+    <bpmn2:operation id="_CALC_DISCOUNT_ServiceOperation" name="calculateDiscount" implementationRef="calculateDiscount">
+      <bpmn2:inMessageRef>_CALC_DISCOUNT_InMessage</bpmn2:inMessageRef>
+      <bpmn2:outMessageRef>_CALC_DISCOUNT_OutMessage</bpmn2:outMessageRef>
+    </bpmn2:operation>
+  </bpmn2:interface>
+  <bpmn2:message id="_CALC_SHIPPING_InMessage" itemRef="_CALC_SHIPPING_InMessageType"/>
+  <bpmn2:message id="_CALC_SHIPPING_OutMessage" itemRef="_CALC_SHIPPING_OutMessageType"/>
+  <bpmn2:interface id="_CALC_SHIPPING_ServiceInterface" name="org.acme.order.service.ShippingService" implementationRef="org.acme.order.service.ShippingService">
+    <bpmn2:operation id="_CALC_SHIPPING_ServiceOperation" name="calculateShipping" implementationRef="calculateShipping">
+      <bpmn2:inMessageRef>_CALC_SHIPPING_InMessage</bpmn2:inMessageRef>
+      <bpmn2:outMessageRef>_CALC_SHIPPING_OutMessage</bpmn2:outMessageRef>
+    </bpmn2:operation>
+  </bpmn2:interface>
+  <bpmn2:message id="_CALC_SUBTOTAL_InMessage" itemRef="_CALC_SUBTOTAL_InMessageType"/>
+  <bpmn2:message id="_CALC_SUBTOTAL_OutMessage" itemRef="_CALC_SUBTOTAL_OutMessageType"/>
+  <bpmn2:interface id="_CALC_SUBTOTAL_ServiceInterface" name="org.acme.order.service.SubTotalCalculationService" implementationRef="org.acme.order.service.SubTotalCalculationService">
+    <bpmn2:operation id="_CALC_SUBTOTAL_ServiceOperation" name="calculateSubtotal" implementationRef="calculateSubtotal">
+      <bpmn2:inMessageRef>_CALC_SUBTOTAL_InMessage</bpmn2:inMessageRef>
+      <bpmn2:outMessageRef>_CALC_SUBTOTAL_OutMessage</bpmn2:outMessageRef>
+    </bpmn2:operation>
+  </bpmn2:interface>
+  <bpmn2:message id="_ORDER_FAILED_InMessage" itemRef="_ORDER_FAILED_InMessageType"/>
+  <bpmn2:message id="_ORDER_FAILED_OutMessage" itemRef="_ORDER_FAILED_OutMessageType"/>
+  <bpmn2:interface id="_ORDER_FAILED_ServiceInterface" name="org.acme.order.service.OrderFailedService" implementationRef="org.acme.order.service.OrderFailedService">
+    <bpmn2:operation id="_ORDER_FAILED_ServiceOperation" name="orderProcesFailed" implementationRef="orderProcesFailed">
+      <bpmn2:inMessageRef>_ORDER_FAILED_InMessage</bpmn2:inMessageRef>
+      <bpmn2:outMessageRef>_ORDER_FAILED_OutMessage</bpmn2:outMessageRef>
+    </bpmn2:operation>
+  </bpmn2:interface>
+  <bpmn2:message id="_CHECK_STOCK_InMessage" itemRef="_CHECK_STOCK_InMessageType"/>
+  <bpmn2:message id="_CHECK_STOCK_OutMessage" itemRef="_CHECK_STOCK_OutMessageType"/>
+  <bpmn2:interface id="_CHECK_STOCK_ServiceInterface" name="org.acme.order.service.StockService" implementationRef="org.acme.order.service.StockService">
+    <bpmn2:operation id="_CHECK_STOCK_ServiceOperation" name="checkStock" implementationRef="checkStock">
+      <bpmn2:inMessageRef>_CHECK_STOCK_InMessage</bpmn2:inMessageRef>
+      <bpmn2:outMessageRef>_CHECK_STOCK_OutMessage</bpmn2:outMessageRef>
+    </bpmn2:operation>
+  </bpmn2:interface>
+  <bpmn2:message id="_VALIDATE_CART_InMessage" itemRef="_VALIDATE_CART_InMessageType"/>
+  <bpmn2:message id="_VALIDATE_CART_OutMessage" itemRef="_VALIDATE_CART_OutMessageType"/>
+  <bpmn2:interface id="_VALIDATE_CART_ServiceInterface" name="org.acme.order.service.CartValidationService" implementationRef="org.acme.order.service.CartValidationService">
+    <bpmn2:operation id="_VALIDATE_CART_ServiceOperation" name="validateCart" implementationRef="validateCart">
+      <bpmn2:inMessageRef>_VALIDATE_CART_InMessage</bpmn2:inMessageRef>
+      <bpmn2:outMessageRef>_VALIDATE_CART_OutMessage</bpmn2:outMessageRef>
+    </bpmn2:operation>
+  </bpmn2:interface>
+  <bpmn2:collaboration id="_37FDD28E-CBB9-40A1-AF5D-CAD95A61CE92" name="Default Collaboration">
+    <bpmn2:participant id="_357BF970-60C3-4184-9087-96EB725FCDDE" name="Pool Participant" processRef="checkout_workflow"/>
+  </bpmn2:collaboration>
+  <bpmn2:process id="checkout_workflow" drools:packageName="org.acme.order" drools:version="1.0" drools:adHoc="false" name="Checkout Workflow" isExecutable="true" processType="Public">
+    <bpmn2:documentation><![CDATA[Mensimulasikan alur OrderWorkflowService.processOrder pada order-service: validasi keranjang, cek stok, hitung subtotal/ongkir/diskon/total, cek duplikat order, buat order, lalu proses pembayaran. Publikasi event PAYMENT_PROCESSED atau ORDER_FAILED diganti menjadi catatan PaymentEventLog in-memory.]]></bpmn2:documentation>
+    <bpmn2:property id="checkout" itemSubjectRef="_checkoutItem" name="checkout"/>
+    <bpmn2:property id="region" itemSubjectRef="_regionItem" name="region"/>
+    <bpmn2:property id="orderId" itemSubjectRef="_orderIdItem" name="orderId"/>
+    <bpmn2:property id="subtotal" itemSubjectRef="_subtotalItem" name="subtotal"/>
+    <bpmn2:property id="shippingCost" itemSubjectRef="_shippingCostItem" name="shippingCost"/>
+    <bpmn2:property id="discount" itemSubjectRef="_discountItem" name="discount"/>
+    <bpmn2:property id="total" itemSubjectRef="_totalItem" name="total"/>
+    <bpmn2:property id="stockAvailable" itemSubjectRef="_stockAvailableItem" name="stockAvailable"/>
+    <bpmn2:property id="orderExists" itemSubjectRef="_orderExistsItem" name="orderExists"/>
+    <bpmn2:sequenceFlow id="_SF1" sourceRef="_START" targetRef="_VALIDATE_CART"/>
+    <bpmn2:sequenceFlow id="_SF2" sourceRef="_VALIDATE_CART" targetRef="_CHECK_STOCK"/>
+    <bpmn2:sequenceFlow id="_SF3" sourceRef="_CHECK_STOCK" targetRef="_STOCK_GW"/>
+    <bpmn2:sequenceFlow id="_SF5" name="Not available" sourceRef="_STOCK_GW" targetRef="_ORDER_FAILED">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Not available]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return !stockAvailable;]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="_SF6" sourceRef="_ORDER_FAILED" targetRef="_END_FAILED"/>
+    <bpmn2:sequenceFlow id="_SF4" name="Available" sourceRef="_STOCK_GW" targetRef="_CALC_SUBTOTAL">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Available]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return stockAvailable;]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="_SF7" sourceRef="_CALC_SUBTOTAL" targetRef="_CALC_SHIPPING"/>
+    <bpmn2:sequenceFlow id="_SF8" sourceRef="_CALC_SHIPPING" targetRef="_CALC_DISCOUNT"/>
+    <bpmn2:sequenceFlow id="_SF9" sourceRef="_CALC_DISCOUNT" targetRef="_CALC_TOTAL"/>
+    <bpmn2:sequenceFlow id="_SF10" sourceRef="_CALC_TOTAL" targetRef="_ORDER_VALIDATION"/>
+    <bpmn2:sequenceFlow id="_SF16" sourceRef="_ORDER_VALIDATION" targetRef="_ORDER_EXISTS_GW"/>
+    <bpmn2:sequenceFlow id="_SF12" name="New order" sourceRef="_ORDER_EXISTS_GW" targetRef="_CREATE_ORDER">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[New order]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return !orderExists;]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="_SF13" sourceRef="_CREATE_ORDER" targetRef="_MERGE_GW"/>
+    <bpmn2:sequenceFlow id="_SF11" name="Already exists" sourceRef="_ORDER_EXISTS_GW" targetRef="_MERGE_GW">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Already exists]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression" language="http://www.java.com/java"><![CDATA[return orderExists;]]></bpmn2:conditionExpression>
+    </bpmn2:sequenceFlow>
+    <bpmn2:sequenceFlow id="_SF14" sourceRef="_MERGE_GW" targetRef="_PROCESS_PAYMENT"/>
+    <bpmn2:sequenceFlow id="_SF15" sourceRef="_PROCESS_PAYMENT" targetRef="_END_DONE"/>
+    <bpmn2:startEvent id="_START" name="Checkout Request Received">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Checkout Request Received]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:outgoing>_SF1</bpmn2:outgoing>
+    </bpmn2:startEvent>
+    <bpmn2:serviceTask id="_VALIDATE_CART" drools:serviceimplementation="Java" drools:serviceinterface="org.acme.order.service.CartValidationService" drools:serviceoperation="validateCart" name="Validate Cart" implementation="Java" operationRef="_VALIDATE_CART_ServiceOperation">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Validate Cart]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF1</bpmn2:incoming>
+      <bpmn2:outgoing>_SF2</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="_VALIDATE_CART_ParameterInputX" drools:dtype="org.acme.shared.dto.CheckoutRequest" itemSubjectRef="__VALIDATE_CART_ParameterInputXItem" name="Parameter"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>_VALIDATE_CART_ParameterInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>checkout</bpmn2:sourceRef>
+        <bpmn2:targetRef>_VALIDATE_CART_ParameterInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+    </bpmn2:serviceTask>
+    <bpmn2:serviceTask id="_CHECK_STOCK" drools:serviceimplementation="Java" drools:serviceinterface="org.acme.order.service.StockService" drools:serviceoperation="checkStock" name="Check Stock" implementation="Java" operationRef="_CHECK_STOCK_ServiceOperation">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Check Stock]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF2</bpmn2:incoming>
+      <bpmn2:outgoing>_SF3</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="_CHECK_STOCK_ParameterInputX" drools:dtype="org.acme.shared.dto.CheckoutRequest" itemSubjectRef="__CHECK_STOCK_ParameterInputXItem" name="Parameter"/>
+        <bpmn2:dataOutput id="_CHECK_STOCK_ResultOutputX" drools:dtype="java.lang.Boolean" itemSubjectRef="__CHECK_STOCK_ResultOutputXItem" name="Result"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>_CHECK_STOCK_ParameterInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>_CHECK_STOCK_ResultOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>checkout</bpmn2:sourceRef>
+        <bpmn2:targetRef>_CHECK_STOCK_ParameterInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation>
+        <bpmn2:sourceRef>_CHECK_STOCK_ResultOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>stockAvailable</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:serviceTask>
+    <bpmn2:exclusiveGateway id="_STOCK_GW" name="Stock Available?" gatewayDirection="Diverging">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Stock Available?]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF3</bpmn2:incoming>
+      <bpmn2:outgoing>_SF4</bpmn2:outgoing>
+      <bpmn2:outgoing>_SF5</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:serviceTask id="_ORDER_FAILED" drools:serviceimplementation="Java" drools:serviceinterface="org.acme.order.service.OrderFailedService" drools:serviceoperation="orderProcesFailed" name="Publish Order Failed" implementation="Java" operationRef="_ORDER_FAILED_ServiceOperation">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Publish Order Failed]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF5</bpmn2:incoming>
+      <bpmn2:outgoing>_SF6</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="_ORDER_FAILED_ParameterInputX" drools:dtype="org.acme.shared.dto.CheckoutRequest" itemSubjectRef="__ORDER_FAILED_ParameterInputXItem" name="Parameter"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>_ORDER_FAILED_ParameterInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>checkout</bpmn2:sourceRef>
+        <bpmn2:targetRef>_ORDER_FAILED_ParameterInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+    </bpmn2:serviceTask>
+    <bpmn2:endEvent id="_END_FAILED" name="Failed">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Failed]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF6</bpmn2:incoming>
+    </bpmn2:endEvent>
+    <bpmn2:serviceTask id="_CALC_SUBTOTAL" drools:serviceimplementation="Java" drools:serviceinterface="org.acme.order.service.SubTotalCalculationService" drools:serviceoperation="calculateSubtotal" name="Calculate Subtotal" implementation="Java" operationRef="_CALC_SUBTOTAL_ServiceOperation">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Calculate Subtotal]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF4</bpmn2:incoming>
+      <bpmn2:outgoing>_SF7</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="_CALC_SUBTOTAL_ParameterInputX" drools:dtype="org.acme.shared.dto.CheckoutRequest" itemSubjectRef="__CALC_SUBTOTAL_ParameterInputXItem" name="Parameter"/>
+        <bpmn2:dataOutput id="_CALC_SUBTOTAL_ResultOutputX" drools:dtype="java.math.BigDecimal" itemSubjectRef="__CALC_SUBTOTAL_ResultOutputXItem" name="Result"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>_CALC_SUBTOTAL_ParameterInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>_CALC_SUBTOTAL_ResultOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>checkout</bpmn2:sourceRef>
+        <bpmn2:targetRef>_CALC_SUBTOTAL_ParameterInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation>
+        <bpmn2:sourceRef>_CALC_SUBTOTAL_ResultOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>subtotal</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:serviceTask>
+    <bpmn2:serviceTask id="_CALC_SHIPPING" drools:serviceimplementation="Java" drools:serviceinterface="org.acme.order.service.ShippingService" drools:serviceoperation="calculateShipping" name="Calculate Shipping" implementation="Java" operationRef="_CALC_SHIPPING_ServiceOperation">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Calculate Shipping]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF7</bpmn2:incoming>
+      <bpmn2:outgoing>_SF8</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="_CALC_SHIPPING_ParameterInputX" drools:dtype="String" itemSubjectRef="__CALC_SHIPPING_ParameterInputXItem" name="Parameter"/>
+        <bpmn2:dataOutput id="_CALC_SHIPPING_ResultOutputX" drools:dtype="java.math.BigDecimal" itemSubjectRef="__CALC_SHIPPING_ResultOutputXItem" name="Result"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>_CALC_SHIPPING_ParameterInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>_CALC_SHIPPING_ResultOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>region</bpmn2:sourceRef>
+        <bpmn2:targetRef>_CALC_SHIPPING_ParameterInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation>
+        <bpmn2:sourceRef>_CALC_SHIPPING_ResultOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>shippingCost</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:serviceTask>
+    <bpmn2:serviceTask id="_CALC_DISCOUNT" drools:serviceimplementation="Java" drools:serviceinterface="org.acme.order.service.DiscountCalculationService" drools:serviceoperation="calculateDiscount" name="Calculate Discount" implementation="Java" operationRef="_CALC_DISCOUNT_ServiceOperation">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Calculate Discount]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF8</bpmn2:incoming>
+      <bpmn2:outgoing>_SF9</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="_CALC_DISCOUNT_ParameterInputX" drools:dtype="java.math.BigDecimal" itemSubjectRef="__CALC_DISCOUNT_ParameterInputXItem" name="Parameter"/>
+        <bpmn2:dataOutput id="_CALC_DISCOUNT_ResultOutputX" drools:dtype="java.math.BigDecimal" itemSubjectRef="__CALC_DISCOUNT_ResultOutputXItem" name="Result"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>_CALC_DISCOUNT_ParameterInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>_CALC_DISCOUNT_ResultOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>subtotal</bpmn2:sourceRef>
+        <bpmn2:targetRef>_CALC_DISCOUNT_ParameterInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation>
+        <bpmn2:sourceRef>_CALC_DISCOUNT_ResultOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>discount</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:serviceTask>
+    <bpmn2:serviceTask id="_CALC_TOTAL" drools:serviceimplementation="Java" drools:serviceinterface="org.acme.order.service.TotalCalculationService" drools:serviceoperation="calculateTotal" name="Calculate Total" implementation="Java" operationRef="_CALC_TOTAL_ServiceOperation">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Calculate Total]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF9</bpmn2:incoming>
+      <bpmn2:outgoing>_SF10</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="_CALC_TOTAL_subtotalInputX" drools:dtype="java.math.BigDecimal" itemSubjectRef="__CALC_TOTAL_subtotalInputXItem" name="subtotal"/>
+        <bpmn2:dataInput id="_CALC_TOTAL_shippingCostInputX" drools:dtype="java.math.BigDecimal" itemSubjectRef="__CALC_TOTAL_shippingCostInputXItem" name="shippingCost"/>
+        <bpmn2:dataInput id="_CALC_TOTAL_discountInputX" drools:dtype="java.math.BigDecimal" itemSubjectRef="__CALC_TOTAL_discountInputXItem" name="discount"/>
+        <bpmn2:dataOutput id="_CALC_TOTAL_ResultOutputX" drools:dtype="java.math.BigDecimal" itemSubjectRef="__CALC_TOTAL_ResultOutputXItem" name="Result"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>_CALC_TOTAL_subtotalInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>_CALC_TOTAL_shippingCostInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>_CALC_TOTAL_discountInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>_CALC_TOTAL_ResultOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>subtotal</bpmn2:sourceRef>
+        <bpmn2:targetRef>_CALC_TOTAL_subtotalInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>shippingCost</bpmn2:sourceRef>
+        <bpmn2:targetRef>_CALC_TOTAL_shippingCostInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>discount</bpmn2:sourceRef>
+        <bpmn2:targetRef>_CALC_TOTAL_discountInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation>
+        <bpmn2:sourceRef>_CALC_TOTAL_ResultOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>total</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:serviceTask>
+    <bpmn2:serviceTask id="_ORDER_VALIDATION" drools:serviceimplementation="Java" drools:serviceinterface="org.acme.order.service.OrderValidationService" drools:serviceoperation="isOrderExists" name="Order Validation" implementation="Java" operationRef="_ORDER_VALIDATION_ServiceOperation">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Order Validation]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF10</bpmn2:incoming>
+      <bpmn2:outgoing>_SF16</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="_ORDER_VALIDATION_ParameterInputX" drools:dtype="String" itemSubjectRef="__ORDER_VALIDATION_ParameterInputXItem" name="Parameter"/>
+        <bpmn2:dataOutput id="_ORDER_VALIDATION_ResultOutputX" drools:dtype="java.lang.Boolean" itemSubjectRef="__ORDER_VALIDATION_ResultOutputXItem" name="Result"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>_ORDER_VALIDATION_ParameterInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+        <bpmn2:outputSet>
+          <bpmn2:dataOutputRefs>_ORDER_VALIDATION_ResultOutputX</bpmn2:dataOutputRefs>
+        </bpmn2:outputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>orderId</bpmn2:sourceRef>
+        <bpmn2:targetRef>_ORDER_VALIDATION_ParameterInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataOutputAssociation>
+        <bpmn2:sourceRef>_ORDER_VALIDATION_ResultOutputX</bpmn2:sourceRef>
+        <bpmn2:targetRef>orderExists</bpmn2:targetRef>
+      </bpmn2:dataOutputAssociation>
+    </bpmn2:serviceTask>
+    <bpmn2:exclusiveGateway id="_ORDER_EXISTS_GW" name="Order Exists?" gatewayDirection="Diverging">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Order Exists?]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF16</bpmn2:incoming>
+      <bpmn2:outgoing>_SF11</bpmn2:outgoing>
+      <bpmn2:outgoing>_SF12</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:serviceTask id="_CREATE_ORDER" drools:serviceimplementation="Java" drools:serviceinterface="org.acme.order.service.OrderCreationService" drools:serviceoperation="createOrder" name="Create Order" implementation="Java" operationRef="_CREATE_ORDER_ServiceOperation">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Create Order]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF12</bpmn2:incoming>
+      <bpmn2:outgoing>_SF13</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="_CREATE_ORDER_requestInputX" drools:dtype="org.acme.shared.dto.CheckoutRequest" itemSubjectRef="__CREATE_ORDER_requestInputXItem" name="request"/>
+        <bpmn2:dataInput id="_CREATE_ORDER_subtotalInputX" drools:dtype="java.math.BigDecimal" itemSubjectRef="__CREATE_ORDER_subtotalInputXItem" name="subtotal"/>
+        <bpmn2:dataInput id="_CREATE_ORDER_shippingCostInputX" drools:dtype="java.math.BigDecimal" itemSubjectRef="__CREATE_ORDER_shippingCostInputXItem" name="shippingCost"/>
+        <bpmn2:dataInput id="_CREATE_ORDER_discountInputX" drools:dtype="java.math.BigDecimal" itemSubjectRef="__CREATE_ORDER_discountInputXItem" name="discount"/>
+        <bpmn2:dataInput id="_CREATE_ORDER_totalInputX" drools:dtype="java.math.BigDecimal" itemSubjectRef="__CREATE_ORDER_totalInputXItem" name="total"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>_CREATE_ORDER_requestInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>_CREATE_ORDER_subtotalInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>_CREATE_ORDER_shippingCostInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>_CREATE_ORDER_discountInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>_CREATE_ORDER_totalInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>checkout</bpmn2:sourceRef>
+        <bpmn2:targetRef>_CREATE_ORDER_requestInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>subtotal</bpmn2:sourceRef>
+        <bpmn2:targetRef>_CREATE_ORDER_subtotalInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>shippingCost</bpmn2:sourceRef>
+        <bpmn2:targetRef>_CREATE_ORDER_shippingCostInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>discount</bpmn2:sourceRef>
+        <bpmn2:targetRef>_CREATE_ORDER_discountInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>total</bpmn2:sourceRef>
+        <bpmn2:targetRef>_CREATE_ORDER_totalInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+    </bpmn2:serviceTask>
+    <bpmn2:exclusiveGateway id="_MERGE_GW" name="Merge" gatewayDirection="Converging">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Merge]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF11</bpmn2:incoming>
+      <bpmn2:incoming>_SF13</bpmn2:incoming>
+      <bpmn2:outgoing>_SF14</bpmn2:outgoing>
+    </bpmn2:exclusiveGateway>
+    <bpmn2:serviceTask id="_PROCESS_PAYMENT" drools:serviceimplementation="Java" drools:serviceinterface="org.acme.order.service.PaymentService" drools:serviceoperation="processPayment" name="Process Payment" implementation="Java" operationRef="_PROCESS_PAYMENT_ServiceOperation">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Process Payment]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF14</bpmn2:incoming>
+      <bpmn2:outgoing>_SF15</bpmn2:outgoing>
+      <bpmn2:ioSpecification>
+        <bpmn2:dataInput id="_PROCESS_PAYMENT_requestInputX" drools:dtype="org.acme.shared.dto.CheckoutRequest" itemSubjectRef="__PROCESS_PAYMENT_requestInputXItem" name="request"/>
+        <bpmn2:dataInput id="_PROCESS_PAYMENT_totalInputX" drools:dtype="java.math.BigDecimal" itemSubjectRef="__PROCESS_PAYMENT_totalInputXItem" name="total"/>
+        <bpmn2:inputSet>
+          <bpmn2:dataInputRefs>_PROCESS_PAYMENT_requestInputX</bpmn2:dataInputRefs>
+          <bpmn2:dataInputRefs>_PROCESS_PAYMENT_totalInputX</bpmn2:dataInputRefs>
+        </bpmn2:inputSet>
+      </bpmn2:ioSpecification>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>checkout</bpmn2:sourceRef>
+        <bpmn2:targetRef>_PROCESS_PAYMENT_requestInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+      <bpmn2:dataInputAssociation>
+        <bpmn2:sourceRef>total</bpmn2:sourceRef>
+        <bpmn2:targetRef>_PROCESS_PAYMENT_totalInputX</bpmn2:targetRef>
+      </bpmn2:dataInputAssociation>
+    </bpmn2:serviceTask>
+    <bpmn2:endEvent id="_END_DONE" name="Done">
+      <bpmn2:extensionElements>
+        <drools:metaData name="elementname">
+          <drools:metaValue><![CDATA[Done]]></drools:metaValue>
+        </drools:metaData>
+      </bpmn2:extensionElements>
+      <bpmn2:incoming>_SF15</bpmn2:incoming>
+    </bpmn2:endEvent>
+  </bpmn2:process>
+  <bpmndi:BPMNDiagram>
+    <bpmndi:BPMNPlane bpmnElement="checkout_workflow">
+      <bpmndi:BPMNShape id="shape__END_DONE" bpmnElement="_END_DONE">
+        <dc:Bounds height="56" width="56" x="2080" y="100"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__PROCESS_PAYMENT" bpmnElement="_PROCESS_PAYMENT">
+        <dc:Bounds height="80" width="140" x="1900" y="88"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__MERGE_GW" bpmnElement="_MERGE_GW">
+        <dc:Bounds height="56" width="56" x="1800" y="100"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__CREATE_ORDER" bpmnElement="_CREATE_ORDER">
+        <dc:Bounds height="80" width="140" x="1630" y="200"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__ORDER_EXISTS_GW" bpmnElement="_ORDER_EXISTS_GW">
+        <dc:Bounds height="56" width="56" x="1560" y="100"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__ORDER_VALIDATION" bpmnElement="_ORDER_VALIDATION">
+        <dc:Bounds height="80" width="140" x="1360" y="88"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__CALC_TOTAL" bpmnElement="_CALC_TOTAL">
+        <dc:Bounds height="80" width="140" x="1200" y="88"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__CALC_DISCOUNT" bpmnElement="_CALC_DISCOUNT">
+        <dc:Bounds height="80" width="140" x="1020" y="88"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__CALC_SHIPPING" bpmnElement="_CALC_SHIPPING">
+        <dc:Bounds height="80" width="140" x="840" y="88"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__CALC_SUBTOTAL" bpmnElement="_CALC_SUBTOTAL">
+        <dc:Bounds height="80" width="140" x="660" y="88"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__END_FAILED" bpmnElement="_END_FAILED">
+        <dc:Bounds height="56" width="56" x="800" y="232"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__ORDER_FAILED" bpmnElement="_ORDER_FAILED">
+        <dc:Bounds height="80" width="140" x="600" y="220"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__STOCK_GW" bpmnElement="_STOCK_GW">
+        <dc:Bounds height="56" width="56" x="540" y="100"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__CHECK_STOCK" bpmnElement="_CHECK_STOCK">
+        <dc:Bounds height="80" width="140" x="360" y="88"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__VALIDATE_CART" bpmnElement="_VALIDATE_CART">
+        <dc:Bounds height="80" width="140" x="180" y="88"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="shape__START" bpmnElement="_START">
+        <dc:Bounds height="56" width="56" x="80" y="100"/>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="edge_shape__PROCESS_PAYMENT_to_shape__END_DONE" bpmnElement="_SF15">
+        <di:waypoint x="2040" y="128"/>
+        <di:waypoint x="2080" y="128"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__MERGE_GW_to_shape__PROCESS_PAYMENT" bpmnElement="_SF14">
+        <di:waypoint x="1856" y="128"/>
+        <di:waypoint x="1900" y="128"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__ORDER_EXISTS_GW_to_shape__MERGE_GW" bpmnElement="_SF11">
+        <di:waypoint x="1616" y="128"/>
+        <di:waypoint x="1800" y="128"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__CREATE_ORDER_to_shape__MERGE_GW" bpmnElement="_SF13">
+        <di:waypoint x="1770" y="240"/>
+        <di:waypoint x="1828" y="240"/>
+        <di:waypoint x="1828" y="156"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__ORDER_EXISTS_GW_to_shape__CREATE_ORDER" bpmnElement="_SF12">
+        <di:waypoint x="1588" y="156"/>
+        <di:waypoint x="1588" y="240"/>
+        <di:waypoint x="1630" y="240"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__ORDER_VALIDATION_to_shape__ORDER_EXISTS_GW" bpmnElement="_SF16">
+        <di:waypoint x="1500" y="128"/>
+        <di:waypoint x="1560" y="128"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__CALC_TOTAL_to_shape__ORDER_VALIDATION" bpmnElement="_SF10">
+        <di:waypoint x="1340" y="128"/>
+        <di:waypoint x="1360" y="128"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__CALC_DISCOUNT_to_shape__CALC_TOTAL" bpmnElement="_SF9">
+        <di:waypoint x="1160" y="128"/>
+        <di:waypoint x="1200" y="128"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__CALC_SHIPPING_to_shape__CALC_DISCOUNT" bpmnElement="_SF8">
+        <di:waypoint x="980" y="128"/>
+        <di:waypoint x="1020" y="128"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__CALC_SUBTOTAL_to_shape__CALC_SHIPPING" bpmnElement="_SF7">
+        <di:waypoint x="800" y="128"/>
+        <di:waypoint x="840" y="128"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__STOCK_GW_to_shape__CALC_SUBTOTAL" bpmnElement="_SF4">
+        <di:waypoint x="596" y="128"/>
+        <di:waypoint x="660" y="128"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__ORDER_FAILED_to_shape__END_FAILED" bpmnElement="_SF6">
+        <di:waypoint x="740" y="260"/>
+        <di:waypoint x="800" y="260"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__STOCK_GW_to_shape__ORDER_FAILED" bpmnElement="_SF5">
+        <di:waypoint x="568" y="156"/>
+        <di:waypoint x="568" y="260"/>
+        <di:waypoint x="600" y="260"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__CHECK_STOCK_to_shape__STOCK_GW" bpmnElement="_SF3">
+        <di:waypoint x="500" y="128"/>
+        <di:waypoint x="540" y="128"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__VALIDATE_CART_to_shape__CHECK_STOCK" bpmnElement="_SF2">
+        <di:waypoint x="320" y="128"/>
+        <di:waypoint x="360" y="128"/>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="edge_shape__START_to_shape__VALIDATE_CART" bpmnElement="_SF1">
+        <di:waypoint x="136" y="128"/>
+        <di:waypoint x="180" y="128"/>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+  <bpmn2:relationship type="BPSimData">
+    <bpmn2:extensionElements>
+      <bpsim:BPSimData>
+        <bpsim:Scenario id="default" name="Simulationscenario">
+          <bpsim:ScenarioParameters/>
+          <bpsim:ElementParameters elementRef="_PROCESS_PAYMENT">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters>
+              <bpsim:UnitCost>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_CREATE_ORDER">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters>
+              <bpsim:UnitCost>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_ORDER_VALIDATION">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters>
+              <bpsim:UnitCost>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_CALC_TOTAL">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters>
+              <bpsim:UnitCost>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_CALC_DISCOUNT">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters>
+              <bpsim:UnitCost>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_CALC_SHIPPING">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters>
+              <bpsim:UnitCost>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_CALC_SUBTOTAL">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters>
+              <bpsim:UnitCost>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_ORDER_FAILED">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters>
+              <bpsim:UnitCost>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_CHECK_STOCK">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters>
+              <bpsim:UnitCost>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_VALIDATE_CART">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+            <bpsim:ResourceParameters>
+              <bpsim:Availability>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Availability>
+              <bpsim:Quantity>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:Quantity>
+            </bpsim:ResourceParameters>
+            <bpsim:CostParameters>
+              <bpsim:UnitCost>
+                <bpsim:FloatingParameter value="0"/>
+              </bpsim:UnitCost>
+            </bpsim:CostParameters>
+          </bpsim:ElementParameters>
+          <bpsim:ElementParameters elementRef="_START">
+            <bpsim:TimeParameters>
+              <bpsim:ProcessingTime>
+                <bpsim:NormalDistribution mean="0" standardDeviation="0"/>
+              </bpsim:ProcessingTime>
+            </bpsim:TimeParameters>
+          </bpsim:ElementParameters>
+        </bpsim:Scenario>
+      </bpsim:BPSimData>
+    </bpmn2:extensionElements>
+    <bpmn2:source>_837fQW-gED-ru8VsGFsATw</bpmn2:source>
+    <bpmn2:target>_837fQW-gED-ru8VsGFsATw</bpmn2:target>
+  </bpmn2:relationship>
+</bpmn2:definitions>
