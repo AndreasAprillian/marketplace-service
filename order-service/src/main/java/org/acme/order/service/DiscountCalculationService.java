@@ -14,7 +14,7 @@ public class DiscountCalculationService {
     DiscountRateRepository discountRateRepository;
 
     public BigDecimal calculateDiscount(BigDecimal total) {
-        DiscountRate rate = discountRateRepository.find("minTotal <= ?1", total).firstResult();
+        DiscountRate rate = discountRateRepository.find("minTotal <= ?1 order by minTotal desc", total).firstResult();
         if (rate != null) {
             return total.multiply(BigDecimal.valueOf(rate.discountPercent))
                     .divide(BigDecimal.valueOf(100));
