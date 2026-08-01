@@ -13,7 +13,7 @@ import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @Path("/products")
-@SecurityRequirement(name = "SecurityScheme")
+@SecurityRequirement(name = "BearerAuth")
 public class ProductResources {
 
     @Inject

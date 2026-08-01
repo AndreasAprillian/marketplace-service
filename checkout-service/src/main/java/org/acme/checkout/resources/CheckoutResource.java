@@ -17,7 +17,7 @@ import java.util.UUID;
 
 @Slf4j
 @Path("/checkout")
-@SecurityRequirement(name = "SecurityScheme")
+@SecurityRequirement(name = "BearerAuth")
 public class CheckoutResource {
 
     @Inject

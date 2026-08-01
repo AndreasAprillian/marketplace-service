@@ -2,6 +2,7 @@ package org.acme.order.workflow;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
 import org.acme.order.service.*;
 import org.acme.shared.dto.CheckoutRequest;
 
@@ -37,6 +38,7 @@ public class OrderWorkflowService {
     @Inject
     OrderValidationService orderValidationService;
 
+    @Transactional
     public void processOrder(CheckoutRequest request) {
         try {
             cartValidationService.validateCart(request);
