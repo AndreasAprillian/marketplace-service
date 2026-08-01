@@ -4,13 +4,13 @@ Multi-module Quarkus marketplace with independent services, each running on its 
 
 ## Modules
 
-| Module | Type | Port | Description |
-| ------ | ---- | ---- | ----------- |
+| Module | Type | Port | Description                                                     |
+| ------ | ---- | ---- |-----------------------------------------------------------------|
 | `shared-library` | library (jar) | - | Shared code (DTOs, base entity, constants) used by every service |
-| `customer-service` | application | 8081 | Customer CRUD |
-| `order-service` | application | 8082 | Order CRUD |
-| `checkout-service` | application | 8083 | Checkout (no DB, Kafka + REST only) |
-| `email-service` | application | 8084 | Email CRUD, consumes events |
+| `customer-service` | application | 8081 | Customer Create and Read                                        |
+| `order-service` | application | 8082 | Order Create and Read                                                      |
+| `checkout-service` | application | 8083 | Checkout (no DB, Kafka + REST only)                             |
+| `email-service` | application | 8084 | Email consumes events                                      |
 
 ## Infrastructure (Docker)
 

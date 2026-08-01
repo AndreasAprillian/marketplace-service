@@ -35,6 +35,7 @@ public class AuthController {
     public Response login(LoginRequest request) {
         try {
             LoginResponse response = authService.login(request);
+            System.out.println("Success login. Happy Shopping!");
             return Response.ok(response).build();
         } catch (RuntimeException e) {
             return Response.status(Response.Status.UNAUTHORIZED).entity(e.getMessage()).build();

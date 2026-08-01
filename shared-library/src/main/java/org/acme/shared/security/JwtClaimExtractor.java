@@ -44,7 +44,7 @@ public class JwtClaimExtractor {
 
     private static String getSecret() {
         String secret = System.getenv("MP_JWT_VERIFY_PUBLICKEY");
-        return secret != null ? secret : "marketplace-secret-key-change-in-production-minimum-256-bits";
+        return secret != null ? secret : "loremipsumdolorsitametconsecteturadipiscingelit";
     }
 
     @Getter

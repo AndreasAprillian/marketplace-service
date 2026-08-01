@@ -33,6 +33,6 @@ public class JwtTokenProvider {
 
     private byte[] getSecretKeyBytes() {
         String secret = System.getenv("MP_JWT_VERIFY_PUBLICKEY");
-        return secret != null ? secret.getBytes() : "marketplace-secret-key-change-in-production-minimum-256-bits".getBytes();
+        return secret != null ? secret.getBytes() : "loremipsumdolorsitametconsecteturadipiscingelit".getBytes();
     }
 }
