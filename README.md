@@ -1,34 +1,35 @@
 # marketplace-service
 
-Multi-module Quarkus marketplace with independent services, each running on its own port and sharing a single PostgreSQL database (`marketplace-db`) and schema, plus Kafka for event-driven messaging.
+Marketplace Quarkus multi-modul dengan service-service independen, masing-masing berjalan di port sendiri dan berbagi satu database PostgreSQL (`marketplace-db`) dengan skema yang sama, serta Kafka untuk messaging berbasis event.
 
-## Modules
+## Modul
 
-| Module | Type | Port | Description                                                     |
-| ------ | ---- | ---- |-----------------------------------------------------------------|
-| `shared-library` | library (jar) | - | Shared code (DTOs, base entity, constants) used by every service |
-| `customer-service` | application | 8081 | Customer Create and Read                                        |
-| `order-service` | application | 8082 | Order Create and Read                                                      |
-| `checkout-service` | application | 8083 | Checkout (no DB, Kafka + REST only)                             |
-| `email-service` | application | 8084 | Email consumes events                                      |
+| Modul | Tipe | Port | Deskripsi                                                     |
+| ------ | ---- | ---- |----------------------------------------------------------------|
+| `shared-library` | library (jar) | - | Kode (DTO, base entity, konstanta) yang dipakai semua service |
+| `customer-service` | application | 8081 | Create dan Read Customer                                       |
+| `order-service` | application | 8082 | Create dan Read Order                                                     |
+| `checkout-service` | application | 8083 | Checkout (tanpa DB, hanya Kafka + REST)                            |
+| `email-service` | application | 8084 | Email mengonsumsi event                                      |
+| `checkout-workflow` | application | 8085 | Model BPMN alur order via Kogito, hanya service in-memory, tanpa DB/Kafka |
 
-## Infrastructure (Docker)
+## Infrastruktur (Docker)
 
-PostgreSQL and Kafka run in Docker via `docker/docker-compose.yml`:
+PostgreSQL dan Kafka berjalan di Docker melalui `docker/docker-compose.yml`:
 
 ```shell script
 docker compose -f docker/docker-compose.yml up -d
 ```
 
-| Service | Host port | Details |
+| Service | Host port | Detail |
 | ------- | --------- | ------- |
 | PostgreSQL | 5433 | db `marketplace-db`, user/pass `postgres/postgres`, schema `public` |
-| Kafka | 9092 | topics created automatically (`marketplace.*.events`) |
+| Kafka | 9092 | topic dibuat otomatis (`marketplace.*.events`) |
 | Kafka UI | 8089 | http://localhost:8089 |
 
-The schema and seed data are created automatically on first start from `docker/postgres/init/01-init.sql`.
+Skema dan data seed dibuat otomatis saat pertama kali dari `docker/postgres/init/01-init.sql`.
 
-All services that use a database connect to the same PostgreSQL:
+Semua service yang memakai database terhubung ke PostgreSQL yang sama:
 
 ```properties
 quarkus.datasource.db-kind=postgresql
@@ -41,44 +42,56 @@ kafka.bootstrap.servers=localhost:9092
 
 ## Building
 
-Build the whole project (all modules):
+Build seluruh proyek (semua modul):
 
 ```shell script
 ./mvnw package
 ```
 
-## Running in dev mode
+## Menjalankan dev mode
 
-Each application module is started individually with `-pl`:
+Setiap modul aplikasi dijalankan satu per satu dengan `-pl`:
 
 ```shell script
 ./mvnw quarkus:dev -pl customer-service
 ./mvnw quarkus:dev -pl order-service
 ./mvnw quarkus:dev -pl checkout-service
 ./mvnw quarkus:dev -pl email-service
+./mvnw quarkus:dev -pl checkout-workflow
 ```
 
-OpenAPI / Swagger UI for each service: `http://localhost:<port>/q/swagger-ui`
+OpenAPI / Swagger UI untuk setiap service: `http://localhost:<port>/q/swagger-ui`
 
-## Packaging and running the application
+### checkout-workflow (Kogito BPMN)
+
+`checkout-workflow` memodelkan alur `OrderWorkflowService` order-service sebagai proses BPMN yang dieksekusi oleh Kogito (jBPM 10). Bean service-nya bersifat in-memory (tanpa DB/Kafka). Catatan:
+
+- Proses dieksekusi lewat test Kogito atau endpoint auto-generated `POST /checkout-workflow` (payload `CheckoutRequest`).
+- Test BPMN:
+
+```shell script
+./mvnw test -pl checkout-workflow -am
+```
+
+## Packaging dan menjalankan aplikasi
 
 ```shell script
 ./mvnw package
 ```
 
-Each service produces a `quarkus-run.jar` in its own `target/quarkus-app/` directory, runnable with:
+Setiap service menghasilkan `quarkus-run.jar` di direktori `target/quarkus-app/` masing-masing, dijalankan dengan:
 
 ```shell script
 java -jar <module>/target/quarkus-app/quarkus-run.jar
 ```
 
-## Creating a native executable
+## Membuat native executable
 
 ```shell script
 ./mvnw package -Dnative
 ```
 
-Or, if you don't have GraalVM installed, run the native executable build in a container:
+Atau, jika kamu tidak punya GraalVM, jalankan build native executable dalam container:
 
 ```shell script
 ./mvnw package -Dnative -Dquarkus.native.container-build=true

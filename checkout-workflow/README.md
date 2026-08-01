@@ -1,9 +1,9 @@
 # checkout-workflow
 
-Modul ini menggambarkan **BPMN proses checkout** marketplace yang dieksekusi dengan **Kogito (Apache KIE jBPM 10 / `jbpm-quarkus`)** di atas **Quarkus 3**. Alur diagram meniru `OrderWorkflowService.processOrder()` pada `order-service`, namun dieksekusi sebagai proses BPMN yang bisa dijalankan di test tanpa membutuhkan database atau Kafka.
+Modul ini menggambarkan **BPMN proses checkout** marketplace yang dieksekusi dengan **Kogito** di atas **Quarkus 3**. Alur diagram meniru `OrderWorkflowService.processOrder()` pada `order-service`, namun dieksekusi sebagai proses BPMN yang bisa dijalankan di test tanpa membutuhkan database atau Kafka.
 
 - Port aplikasi: `8085`
-- Dependency Kogito: `org.jbpm:jbpm-quarkus` (diatur oleh `org.kie.kogito:kogito-bom:10.2.0`)
+- Dependency Kogito: `org.jbpm:jbpm-quarkus` (`org.kie.kogito:kogito-bom:10.2.0`)
 
 ## BPMN: `src/main/resources/checkout-workflow.bpmn2`
 
@@ -36,17 +36,17 @@ Dua *exclusive gateway* memodelkan percabangan yang ada di kode:
 
 ## Service yang digunakan (sesuai `order-service`)
 
-| BPMN Service Task | Class (order-service) | Metode | Peran di alur nyata |
-| --- | --- | --- | --- |
-| Validate Cart | `CartValidationService` | `validateCart(CheckoutRequest)` | Memastikan tiap `productId` di keranjang valid; bila tidak, memicu `orderProcesFailed` |
-| Check Stock | `StockService` | `checkStock(...)` | Mengecek stok tiap item dan **mengurangi stok**; mengembalikan `boolean` |
-| Publish Order Failed | `OrderFailedService` | `orderProcesFailed(CheckoutRequest)` | Menerbitkan event `ORDER_FAILED` (di sini diganti catatan log) |
-| Calculate Subtotal | `SubTotalCalculationService` | `calculateSubtotal(CheckoutRequest)` | Menjumlahkan `harga x qty` semua item |
-| Calculate Shipping | `ShippingService` | `calculateShipping(region)` | Mengambil tarif ongkir per region (`shipping_rates`), default `10000` |
-| Calculate Discount | `DiscountCalculationService` | `calculateDiscount(subtotal)` | Diskon persen dari `discount_rates` bila subtotal memenuhi `minTotal` |
-| Calculate Total | `TotalCalculationService` | `calculateTotal(subtotal, shippingCost, discount)` | `subtotal + shippingCost - discount` |
-| Create Order | `OrderCreationService` | `createOrder(...)` | Menyimpan order (status `CREATED`, payment `PENDING`) + order_items |
-| Process Payment | `PaymentService` | `processPayment(...)` | Menerbitkan event `PAYMENT_PROCESSED` (status `SUCCESS`) |
+| BPMN Service Task | Class (order-service) | Metode | Peran di alur nyata                                                            |
+| --- | --- | --- |--------------------------------------------------------------------------------|
+| Validate Cart | `CartValidationService` | `validateCart(CheckoutRequest)` | Memastikan tiap `productId` di keranjang valid; jika tidak, triger `orderProcesFailed` |
+| Check Stock | `StockService` | `checkStock(...)` | Mengecek stok tiap item dan **mengurangi stok**; mengembalikan `boolean`       |
+| Publish Order Failed | `OrderFailedService` | `orderProcesFailed(CheckoutRequest)` | Menerbitkan event `ORDER_FAILED` (diganti catatan log)                         |
+| Calculate Subtotal | `SubTotalCalculationService` | `calculateSubtotal(CheckoutRequest)` | Menjumlahkan `harga x qty` semua item                                          |
+| Calculate Shipping | `ShippingService` | `calculateShipping(region)` | Mengambil tarif ongkir per region (`shipping_rates`), default `10000`          |
+| Calculate Discount | `DiscountCalculationService` | `calculateDiscount(subtotal)` | Diskon persen dari `discount_rates` bila subtotal memenuhi `minTotal`          |
+| Calculate Total | `TotalCalculationService` | `calculateTotal(subtotal, shippingCost, discount)` | `subtotal + shippingCost - discount`                                           |
+| Create Order | `OrderCreationService` | `createOrder(...)` | Menyimpan order (status `CREATED`, payment `PENDING`) + order_items            |
+| Process Payment | `PaymentService` | `processPayment(...)` | Menerbitkan event `PAYMENT_PROCESSED` (status `SUCCESS`)                       |
 
 > Catatan: untuk bisa dieksekusi di test tanpa DB/Kafka, bean di modul ini (`org.acme.order.service.*`) adalah replika sederhana dari service `order-service` — nama class & metode sama, namun data produk/stok/ongkir/diskon disimpan in-memory di `InMemoryStore`, dan event Kafka diganti pencatatan ke `PaymentEventLog`.
 
