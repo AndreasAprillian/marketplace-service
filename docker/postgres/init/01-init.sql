@@ -7,7 +7,7 @@
 
 CREATE TABLE IF NOT EXISTS customers (
     id        BIGSERIAL PRIMARY KEY,
-    username  VARCHAR(255),
+    username  VARCHAR(255) UNIQUE,
     email     VARCHAR(255),
     password  VARCHAR(255),
     phone_no  VARCHAR(255)
@@ -16,16 +16,16 @@ CREATE TABLE IF NOT EXISTS customers (
 CREATE TABLE IF NOT EXISTS products (
     id    VARCHAR(255) PRIMARY KEY,
     name  VARCHAR(255),
-    price NUMERIC(16, 2),
+    price DECIMAL(16, 2),
     stock INT
 );
 
 CREATE TABLE IF NOT EXISTS orders (
     order_id         VARCHAR(255) PRIMARY KEY,
-    total            NUMERIC(16, 2),
-    shipping_cost    NUMERIC(16, 2),
-    discount         NUMERIC(16, 2),
-    sub_total        NUMERIC(16, 2),
+    total            DECIMAL(16, 2),
+    shipping_cost    DECIMAL(16, 2),
+    discount         DECIMAL(16, 2),
+    sub_total        DECIMAL(16, 2),
     payment_method   VARCHAR(255),
     payment_status   VARCHAR(255),
     customer_username VARCHAR(255),
@@ -39,19 +39,19 @@ CREATE TABLE IF NOT EXISTS order_items (
     product_id   VARCHAR(255),
     product_name VARCHAR(255),
     quantity     INT,
-    price        NUMERIC(16, 2)
+    price        DECIMAL(16, 2)
 );
 
 CREATE TABLE IF NOT EXISTS discount_rates (
     id               BIGSERIAL PRIMARY KEY,
-    min_total        NUMERIC(16, 2),
+    min_total        DECIMAL(16, 2) UNIQUE,
     discount_percent INT
 );
 
 CREATE TABLE IF NOT EXISTS shipping_rates (
     id     BIGSERIAL PRIMARY KEY,
-    region VARCHAR(255),
-    rate   NUMERIC(16, 2)
+    region VARCHAR(255) UNIQUE,
+    rate   DECIMAL(16, 2)
 );
 
 CREATE TABLE IF NOT EXISTS email_logs (
@@ -68,7 +68,7 @@ CREATE TABLE IF NOT EXISTS email_logs (
 -- Seed data
 -- =============================================================
 
--- Password semua akun seed: password123 (BCrypt)
+-- Password semua akun seed: password123
 INSERT INTO customers (username, email, password, phone_no) VALUES
     ('budi',   'budi@example.com',   '$2a$10$BMx1wC7tZH.j4Gz.R2XNY.L8X3rkBmfIo45kEKTTuwVDOjQSyJ4z2', '081234567890'),
     ('siti',   'siti@example.com',   '$2a$10$BMx1wC7tZH.j4Gz.R2XNY.L8X3rkBmfIo45kEKTTuwVDOjQSyJ4z2', '081298765432')
