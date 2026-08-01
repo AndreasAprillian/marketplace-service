@@ -9,9 +9,11 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.acme.checkout.client.OrderServiceClient;
 import org.acme.shared.security.JwtClaimExtractor;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 import org.eclipse.microprofile.rest.client.inject.RestClient;
 
 @Path("/products")
+@SecurityRequirement(name = "SecurityScheme")
 public class ProductResources {
 
     @Inject

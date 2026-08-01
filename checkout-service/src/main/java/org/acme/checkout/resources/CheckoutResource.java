@@ -11,11 +11,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.acme.checkout.service.CheckoutService;
 import org.acme.shared.dto.CheckoutRequest;
 import org.acme.shared.security.JwtClaimExtractor;
+import org.eclipse.microprofile.openapi.annotations.security.SecurityRequirement;
 
 import java.util.UUID;
 
 @Slf4j
 @Path("/checkout")
+@SecurityRequirement(name = "SecurityScheme")
 public class CheckoutResource {
 
     @Inject
